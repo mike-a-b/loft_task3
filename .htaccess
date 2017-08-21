@@ -1,0 +1,4 @@
+Options All +Indexes
+AddDefaultCharset UTF-8
+php_value error_reporting All
+php_flag display_errors On
