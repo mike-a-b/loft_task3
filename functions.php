@@ -98,3 +98,54 @@ function task2()
         }
     }
 }
+
+function task3()
+{
+    $array = [];
+    $file_csv = "output.csv";
+    for ($i = 0; $i < 50; $i++) {
+        $array[] = mt_rand(1, 100);
+    }
+    $handle = fopen($file_csv, 'w+');
+    fputcsv($handle, $array, ';');
+    fclose($handle);
+
+    $handle = fopen($file_csv, "r") or die('Ошибка при чтении файла');
+    $c = 0;//counter
+    $array2 = [];
+    $sum = 0;
+    while (($csv_data = fgetcsv($handle, 100, ';')) !== false) {
+        $array2[$c] = $csv_data;
+        if (($array2[$c] % 2) !== 0) {
+            $sum += $array2[$c];
+        }
+        $c++;
+    }
+    echo "Сумма четных чисел = $sum<br>";
+}
+
+function task4()
+{
+    $url =
+        "https://en.wikipedia.org/w/api.php?action=query&titles=Main%20Page&prop=revisions&rvprop=content&format=json";
+    $user_agent = "Opera/9.80 (Windows NT 6.1; WOW64) Presto/2.12.388 Version/12.14";
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_REFERER, 'https://yandex.ru/');
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+    curl_setopt($ch, CURLOPT_ENCODING, "");
+    curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+    $json_content = curl_exec($ch);
+    $err = curl_errno($ch);
+//    $err_txt = curl_strerror($err);
+    $errmsg  = curl_error($ch);
+    //my operation with content
+    $json_content = json_decode($json_content);
+    echo "Page ID: {$json_content->query->pages->{15580374}->pageid}<br><hr>";
+    echo "Title: {$json_content->query->pages->{15580374}->title}";
+    curl_close($ch);
+}
