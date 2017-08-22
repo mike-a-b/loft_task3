@@ -1,6 +1,7 @@
 # Created by .ignore support plugin (hsz.mobi)
 .idea
-04intern.loft
 access.log
 error.log
+
+/04intern.loft/
 /danni2/

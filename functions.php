@@ -62,32 +62,39 @@ function task2()
     $jsoned_array = json_encode($array_for_change);
 
     $file = 'output.json';
-    $hndl = fopen($file, 'a+');
+    $hndl = fopen($file, 'w');
     if (!fwrite($hndl, $jsoned_array . PHP_EOL)) {
         die('не получилась запись в файл');
     };
     fclose($hndl);
 
     $tmp_file = file_get_contents($file);
-    $tmp_file = json_decode($tmp_file);
-    count($tmp_file);
-    $random = mt_rand(0, count($tmp_file));
-    $tmp_file[$random] = "asdfasdfsdf";
+    $tmp_file = (array)json_decode($tmp_file, true);
+//решаем рандомно менять элемент массива или нет
+    foreach ($tmp_file as &$item) {
+        if ((boolean)($change_or_not_flag = rand(0, 1))) {
+            $item = strrev((string)$item);
+        }
+    }
+    $tmp_file = json_encode($tmp_file);
+
+//записываем измененный массив - объект в файл *.json
     $file2 = "output2.json";
-    $hndl = fopen($file2, 'a+');
-    if (!fwrite($hndl, $tmp_file . PHP_EOL)) {
+//    file_put_contents($file2, $tmp_file);
+    $hndl = fopen($file2, 'w+');
+    if (!fwrite($hndl, $tmp_file.PHP_EOL)) {
         die('не получилась запись в файл');
     };
     fclose($hndl);
 
-    $file = file_get_contents($file);
-    $file2 = file_get_contents($file2);
-    $file = json_decode($file);
-    $file2 = json_decode($file2);
-
-    for ($i = 0; $i <= count($file); $i++) {
-        if ($file[$i] !== $file2[$i]) {
-            echo "отличающийся элемент = $i - ый: {$file['$i']} !== {$file2[$i]} ";
+    $file1_array = file_get_contents($file);
+    $file2_array = file_get_contents($file2);
+    $file1_array = (array)json_decode($file1_array, true);
+    $file2_array = (array)json_decode($file2_array, true);
+//выводим отличия в браузер
+    foreach ($file1_array as $k => $v) {
+        if (strcmp((string)$file1_array[$k], (string)$file2_array[$k]) != 0) {
+            echo "Отличающиеся элементы 'Элемент1' = {$file1_array[$k]}, 'Элемент2' = $file2_array[$k]<br><hr>";
         }
     }
 }
