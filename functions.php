@@ -115,13 +115,13 @@ function task3()
     $array2 = [];
     $sum = 0;
     while (($csv_data = fgetcsv($handle, 100, ';')) !== false) {
-        $array2[$c] = $csv_data;
+        $array2 = $csv_data;
         if (($array2[$c] % 2) !== 0) {
             $sum += $array2[$c];
         }
         $c++;
     }
-    echo "Сумма четных чисел = $sum<br>";
+    echo "Сумма четных чисел = $sum<br><hr>";
 }
 
 function task4()
